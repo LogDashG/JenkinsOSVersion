@@ -1,10 +1,8 @@
 #!/usr/bin/env groovy
 /*
  * Jenkinsfile
- * JenkinsfileTemplate
- *
- *
- */
+ * JenkinOSVersion
+*/
 
 import jenkins.model.*
 
@@ -28,51 +26,12 @@ try {
     timeout(time: 1, unit: 'HOURS') {
         withEnv(['LANG=en_US.UTF-8']) {
             node {
-                stage("🛒 Checkout") {
-                    checkout scm
-                }
-                stage("📦 Bundler") {
+                stage("🖥️ macOS Version") {
                     // https://jenkins.io/doc/pipeline/steps/workflow-durable-task-step/#sh-shell-script
                     sh(
-                        script: "gem list bundler",
-                        label: "💎 List gems"
+                        script: "sw_vers -productVersion; system_profiler SPSoftwareDataType; uname -a"
+                        label: "🖥️ macOS Version"
                     )
-
-                    // Capture stdout
-                    output = sh(
-                        script: "which bundle",
-                        label: "❓ Which",
-                        returnStdout: true
-                    ).trim()
-
-                    // Suppress build failure
-                    Integer status = sh(
-                        script: """
-                            false
-                        """,
-                        label: "✔️ Check",
-                        returnStatus: true
-                    )
-
-                    if (status != 0) {
-                        echo "Aborting build. 😞"
-                        currentBuild.rawBuild.@result = hudson.model.Result.ABORTED
-                    }
-                }
-
-                echo "currentBuild.result: ${currentBuild.result}"
-
-                // build.@result = hudson.model.Result.SUCCESS
-                // build.@result = hudson.model.Result.NOT_BUILT
-                // build.@result = hudson.model.Result.UNSTABLE
-                // build.@result = hudson.model.Result.FAILURE
-                // build.@result = hudson.model.Result.ABORTED
-
-                if (currentBuild.result && currentBuild.result != 'SUCCESS') {
-                    return
-                }
-
-                stage("❓ Conditional Stage") {
                 }
             }
         }
