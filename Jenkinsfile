@@ -29,7 +29,7 @@ try {
                 stage("🖥️ macOS Version") {
                     // https://jenkins.io/doc/pipeline/steps/workflow-durable-task-step/#sh-shell-script
                     sh(
-                        script: "sw_vers -productVersion; system_profiler SPSoftwareDataType; uname -a"
+                        script: "sw_vers -productVersion; system_profiler SPSoftwareDataType; uname -a",
                         label: "🖥️ macOS Version"
                     )
                 }
